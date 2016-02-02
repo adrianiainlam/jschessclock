@@ -1,0 +1,97 @@
+body {
+  transform-origin: 0 0;
+  overflow: hidden;
+  text-align: center;
+}
+
+.clock-container {
+  position: relative;
+  width: 650px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.flags > div {
+  display: inline-block;
+  visibility: hidden;
+  animation: blinker 1s linear infinite;
+  font-size: 200%;
+  font-family: "DejaVu Sans",FreeSerif,Code2000,"BabelStone Han","Lucida Sans";
+}
+
+#flag-left {
+  position: absolute;
+  top: 35%;
+  z-index: 9999;
+  left: 5%;
+}
+#flag-right {
+  position: absolute;
+  top: 35%;
+  z-index: 9999;
+  right: 5%;
+}
+
+@keyframes blinker {
+  50% { opacity: 0; }
+}
+
+.timers {
+  clear: both;
+  width: 530px; /* 570, -40 for aesthetic reason */
+  position: absolute;
+  top: 50%;
+  z-index: 9999;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.timer {
+  font-size: 400%;
+  display: inline-block;
+}
+
+#timer-left {
+  float: left;
+}
+#timer-right {
+  float: right;
+}
+
+.indicators {
+  font-size: 167%;
+  display: inline-block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+h1 {
+  text-align: center;
+}
+
+.commands {
+  clear: both;
+  margin: 0 auto;
+  width: 650px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right:auto;
+  bottom: 5%;
+  z-index: 9999;
+}
+
+.cmd {
+  display: inline-block;
+  cursor: pointer;
+  background-color: #FFF;
+  padding: 5px;
+  border: 3px solid #800000;
+  border-radius: 5px;
+}

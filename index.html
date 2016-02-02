@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>JSChessClock</title>
+    <script src="script.js"></script>
+    <!--<link rel="stylesheet" type="text/css" href="style.css" />-->
+  </head>
+  <body onload="init()" onresize="fitscreen()">
+    <h1>JSChessClock</h1>
+    
+    <div class="clock-container">
+      <svg version="1.1" width="650" height="500"
+           xmlns="http://www.w3.org/2000/svg">
+        <path id="left-button-top" class="button-long" fill="#c0c0c0" 
+              d="M 210 70 A 140 140 0 0 0 30 70 Z" stroke="#c0c0c0"
+              onclick="toggle()" cursor="pointer" />
+        <rect id="left-button-body" class="button-long" x="60" y="70"
+              width="120" height="80" stroke="#c0c0c0" fill="#c0c0c0"
+              onclick="toggle()" cursor="pointer" />
+        <path id="right-button-top" class="button-short" stroke="#c0c0c0"
+              d="M 620 120 A 140 140 0 0 0 440 120 Z" fill="#c0c0c0" />
+        <rect id="right-button-body" class="button-short" x="470" y="120"
+              width="120" height="30" stroke="#c0c0c0" fill="#c0c0c0" />
+        <rect x="0" y="150" width="650" height="350" rx="25" ry="25"
+              fill="#bc5454" />
+        <rect x="40" y="245" width="235" height="90" rx="10" ry="10"
+              fill="white" />
+        <rect x="375" y="245" width="235" height="90" rx="10" ry="10"
+              fill="white" />
+        <line x1="0" y1="420" x2="650" y2="420" stroke="black"
+              stroke-width="1" />
+      </svg>
+      <div class="flags">
+        <div id="flag-left">&#x2690;</div>
+        <div id="flag-right">&#x2691;</div>
+      </div>
+      <div class="timers">
+        <div class="timer" id="timer-left">15:00</div>
+        <div class="indicators">
+          <div id="pause">❚❚</div>
+          <div id="play">◀</div>
+        </div>
+        <div class="timer" id="timer-right">15:00</div>
+      </div>
+      <div class="commands">
+        <div class="cmd" onclick="setTime();">[S]et time</div>
+        <div class="cmd" onclick="reset();">[R]eset to previous</div>
+        <div class="cmd" onclick="pauseResume();">[P]ause / resume</div>
+        <div class="cmd" onclick="toggle();">[space] Toggle</div>
+      </div>
+    </div>
+  </body>
+</html>
