@@ -21,6 +21,18 @@ body {
   margin-right: auto;
 }
 
+h1 {
+  width: 20ch;
+  text-align: center;
+  position: absolute;
+  top: 70%;
+  z-index: 9999;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .flags > div {
   visibility: hidden;
   animation: blinker 1s linear infinite;
@@ -56,10 +68,6 @@ body {
 .indicators {
   width: 20pt;
   font-size: 20pt;
-}
-
-h1 {
-  text-align: center;
 }
 
 .commands {

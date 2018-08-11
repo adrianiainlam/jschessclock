@@ -12,10 +12,16 @@ function Timer(id) {
     var flagelem = document.getElementById(flagid);
     flagelem.style.visibility = time <= 0 ? "visible" : "hidden";
   };
+
+  var startTickingUnixTime = null;
+  var remainingTimeAtTickingStart = null;
+
   var thisTimer = this; // workaround to use this in setInterval
   this.tick = function() {
-    time -= (precision <= time ? precision : time);
+    var currentPassedTime = new Date() - startTickingUnixTime;
+    time = remainingTimeAtTickingStart - currentPassedTime;
     if(time <= 0) {
+      time = 0;
       // time's up
       clearInterval(intervalID);
       thisTimer.isTicking = false;
@@ -23,6 +29,8 @@ function Timer(id) {
     outputTime();
   };
   this.start = function() {
+    startTickingUnixTime = new Date();
+    remainingTimeAtTickingStart = time;
     intervalID = setInterval(this.tick, precision);
     this.isTicking = true;
   };
@@ -130,7 +138,7 @@ function toggle() {
   var rbt = document.getElementById('right-button-top');
   var rbt_d = rbt.getAttribute('d').split(' ');
   var rbb = document.getElementById('right-button-body');
-  
+
   var y_diff = 50 * (leftIsLong ? 1 : -1);
   var classes = ['button-short', 'button-long'];
 
@@ -150,7 +158,7 @@ function toggle() {
   rbb.setAttribute('class', classes[(leftIsLong + 1) % 2]);
   lbt.setAttribute('d', lbt_d.join(' '));
   rbt.setAttribute('d', rbt_d.join(' '));
-  
+
   lbt.setAttribute('onclick', leftIsLong ? '' : 'toggle()');
   lbb.setAttribute('onclick', leftIsLong ? '' : 'toggle()');
   lbt.setAttribute('cursor', leftIsLong ? 'default' : 'pointer');
@@ -173,7 +181,7 @@ function setTime() {
   var leftstart, rightstart;
   var def = timeToTimeStr(currentTimers.leftTimer.getDefaultTime());
   var regex = /[0-9][0-9]:[0-5][0-9]/;
-  
+
   leftstart = prompt("Time for LEFT player in MM:SS", def);
   if(leftstart === null) return; // Cancel
   while(!leftstart.match(regex)) {
@@ -199,7 +207,7 @@ function reset() {
 
 function init() {
   insertcss();
-  setTimeout(fitscreen, 5); // hack to allow DOM to be redrawn with new css
+  setTimeout(fitscreen, 2000); // hack to allow DOM to be redrawn with new css
 }
 
 function fitscreen() {
@@ -208,19 +216,14 @@ function fitscreen() {
    */
   var heightRatio =  window.innerHeight / document.body.scrollHeight;
   var widthRatio = window.innerWidth / document.body.scrollWidth;
-  var scaleRatio = Math.min(heightRatio, widthRatio);
+  var scaleRatio = Math.min(heightRatio, widthRatio, 1);
   document.body.style.transform = 'scale(' + scaleRatio + ')';
 }
 
 function insertcss() {
   /* fix positions for browsers that don't support flex */
-  var cssfile = document.createElement("link");
-  cssfile.setAttribute("rel", "stylesheet");
-  cssfile.setAttribute("type", "text/css");
-  if('align-items' in document.body.style) {
-    cssfile.setAttribute("href", "style.css");
-  } else {
+  var cssfile = document.getElementById("style");
+  if(!('align-items' in document.body.style)) {
     cssfile.setAttribute("href", "noflex.css");
   }
-  document.head.appendChild(cssfile);
 }
