@@ -65,9 +65,41 @@ h1 {
   font-size: 48pt;
 }
 
+.increments {
+  width: 650px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /*margin-bottom: 96pt;*/
+  position: absolute;
+  top: 50%;
+  z-index: 9999;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.increment {
+  width: 300pt;
+  font-size: 12pt;
+  text-align: right;
+}
+
+#increment-left {
+  margin-right: 48pt;
+  visibility: hidden;
+}
+
+#increment-right {
+  margin-right: 32pt;
+  visibility: hidden;
+}
+
 .indicators {
   width: 20pt;
   font-size: 20pt;
+  transform: scaleX(2);
 }
 
 .commands {

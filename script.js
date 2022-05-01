@@ -6,11 +6,18 @@ function Timer(id) {
   var time = defaultTime;
   var intervalID;
   this.isTicking = false;
+  var increment = 0;
+  var defaultIncrement = 0;
+
   var outputTime = function() {
     document.getElementById(id).innerHTML = timeToTimeStr(time);
     var flagid = "flag-" + id.split('-')[1];
     var flagelem = document.getElementById(flagid);
     flagelem.style.visibility = time <= 0 ? "visible" : "hidden";
+    var incid = "increment-" + id.split('-')[1];
+    var incelem = document.getElementById(incid);
+    incelem.innerHTML = "+" + (increment / 1000).toString();
+    incelem.style.visibility = increment > 0 ? "visible" : "hidden";
   };
 
   var startTickingUnixTime = null;
@@ -34,13 +41,20 @@ function Timer(id) {
     intervalID = setInterval(this.tick, precision);
     this.isTicking = true;
   };
-  this.stop = function() {
+  this.stop = function(toggle = false) {
     clearInterval(intervalID);
     this.isTicking = false;
+    if (toggle && this.getTime() > 0) {
+      this.setTime(this.getTime() + increment, increment, true);
+    }
   };
-  this.setTime = function(t) {
+  this.setTime = function(t, inc = 0, toggle = false) {
     time = t;
-    defaultTime = t;
+    increment = inc;
+    if (!toggle) {
+      defaultTime = t;
+      defaultIncrement = inc;
+    }
     outputTime();
   };
   this.getTime = function() {
@@ -50,7 +64,7 @@ function Timer(id) {
     if(this.isTicking) {
       this.stop();
     }
-    this.setTime(defaultTime);
+    this.setTime(defaultTime, defaultIncrement);
   };
   this.getDefaultTime = function() {
     return defaultTime;
@@ -68,7 +82,7 @@ var currentTimers = new (function() {
     this.passive   = this.active;
     this.active    = tmp;
     var icon       = document.getElementById("play");
-    icon.innerHTML = (icon.innerHTML == "◀" ? "▶" : "◀");
+    icon.innerHTML = (icon.innerHTML == "⏴" ? "⏵" : "⏴");
   };
   this.pause = function() {
     this.active.stop();
@@ -127,7 +141,7 @@ document.onkeydown = function(e) {
 
 function toggle() {
   if(!currentTimers.isPaused) {
-    currentTimers.active.stop();
+    currentTimers.active.stop(true);
     currentTimers.passive.start();
   }
   currentTimers.swap();
@@ -180,23 +194,38 @@ function pauseResume() {
 function setTime() {
   var leftstart, rightstart;
   var def = timeToTimeStr(currentTimers.leftTimer.getDefaultTime());
-  var regex = /[0-9][0-9]:[0-5][0-9]/;
+  var regex = /[0-9][0-9]:[0-5][0-9](\+[0-9]+)?/;
 
-  leftstart = prompt("Time for LEFT player in MM:SS", def);
+  leftstart = prompt("Time for LEFT player in MM:SS or MM:SS+S", def);
   if(leftstart === null) return; // Cancel
   while(!leftstart.match(regex)) {
-    leftstart = prompt("Invalid value\nTime for LEFT player in MM:SS", def);
+    leftstart = prompt("Invalid value\nTime for LEFT player in MM:SS or MM:SS+S", def);
     if(leftstart === null) return; // Cancel
   }
   def = leftstart;
-  rightstart = prompt("Time for RIGHT player in MM:SS", def);
+  rightstart = prompt("Time for RIGHT player in MM:SS or MM:SS+S", def);
   if(rightstart === null) return; // Cancel
   while(!rightstart.match(regex)) {
-    rightstart = prompt("Invalid value\nTime for RIGHT player in MM:SS", def);
+    rightstart = prompt("Invalid value\nTime for RIGHT player in MM:SS or MM:SS+S", def);
     if(rightstart === null) return; // Cancel
   }
-  currentTimers.leftTimer.setTime(timeStrToTime(leftstart));
-  currentTimers.rightTimer.setTime(timeStrToTime(rightstart));
+
+  if(leftstart.indexOf('+') > 0) {
+    var baseTime = leftstart.split('+')[0];
+    var inc = leftstart.split('+')[1];
+    currentTimers.leftTimer.setTime(timeStrToTime(baseTime), parseInt(inc) * 1000);
+  }
+  else {
+    currentTimers.leftTimer.setTime(timeStrToTime(leftstart));
+  }
+  if(rightstart.indexOf('+') > 0) {
+    var baseTime = rightstart.split('+')[0];
+    var inc = rightstart.split('+')[1];
+    currentTimers.rightTimer.setTime(timeStrToTime(baseTime), parseInt(inc) * 1000);
+  }
+  else {
+    currentTimers.rightTimer.setTime(timeStrToTime(leftstart));
+  }
 }
 
 function reset() {
